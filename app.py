@@ -1,13 +1,13 @@
 import os
 import json
 from flask import Flask, request, jsonify, Response, stream_with_context
-import anthropic
+from mistralai import Mistral
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+client = Mistral(api_key=os.environ["MISTRAL_API_KEY"])
 
 DEFAULT_SYSTEM_PROMPT = (
     "Tu es un assistant médical francophone. "
@@ -29,18 +29,22 @@ def chat():
 
     history = data.get("messages", [])
     system_prompt = data.get("system_prompt", DEFAULT_SYSTEM_PROMPT)
-    messages = list(history) + [{"role": "user", "content": message}]
+    messages = (
+        [{"role": "system", "content": system_prompt}]
+        + list(history)
+        + [{"role": "user", "content": message}]
+    )
 
     def generate():
-        with client.messages.stream(
-            model="claude-opus-4-6",
-            max_tokens=1024,
-            system=system_prompt,
+        with client.chat.stream(
+            model="mistral-large-latest",
             messages=messages,
         ) as stream:
-            for text in stream.text_stream:
-                payload = json.dumps({"token": text})
-                yield f"data: {payload}\n\n"
+            for event in stream:
+                content = event.data.choices[0].delta.content
+                if content:
+                    payload = json.dumps({"token": content})
+                    yield f"data: {payload}\n\n"
         yield "data: [DONE]\n\n"
 
     return Response(

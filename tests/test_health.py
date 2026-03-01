@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault("ANTHROPIC_API_KEY", "test-key")
+os.environ.setdefault("MISTRAL_API_KEY", "test-key")
 
 import pytest
 from app import app
