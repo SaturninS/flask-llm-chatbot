@@ -1,21 +1,30 @@
 # flask-llm-chatbot
 
-Chatbot Flask avec streaming SSE et API Anthropic Claude. Gestion du contexte conversationnel et system prompt paramétrable.
+Chatbot Flask avec streaming SSE et API Mistral. Gestion du contexte conversationnel et system prompt paramétrable.
 
 ## Architecture
 
 ```
-POST /chat  ──►  Flask  ──►  Anthropic API  ──►  SSE stream
+POST /chat  ──►  Flask  ──►  Mistral API  ──►  SSE stream
 GET  /health ──► {"status": "ok"}
 ```
 
-## Installation
+## Installation locale
 
 ```bash
-cp .env.example .env
-# Renseigner ANTHROPIC_API_KEY dans .env
+# 1. Créer et activer un environnement virtuel
+python3 -m venv .venv
+source .venv/bin/activate       # Linux / macOS
+# .venv\Scripts\activate        # Windows
 
+# 2. Installer les dépendances
 pip install -r requirements.txt
+
+# 3. Configurer la clé API
+cp .env.example .env
+# Renseigner MISTRAL_API_KEY dans .env
+
+# 4. Lancer l'application
 python app.py
 ```
 
