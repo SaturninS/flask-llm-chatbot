@@ -1,8 +1,16 @@
-import os
 import json
-from flask import Flask, request, jsonify, Response, stream_with_context, render_template
-from mistralai import Mistral
+import os
+
 from dotenv import load_dotenv
+from flask import (
+    Flask,
+    Response,
+    jsonify,
+    render_template,
+    request,
+    stream_with_context,
+)
+from mistralai import Mistral
 
 load_dotenv()
 
