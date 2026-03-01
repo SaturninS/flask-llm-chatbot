@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, request, jsonify, Response, stream_with_context
+from flask import Flask, request, jsonify, Response, stream_with_context, render_template
 from mistralai import Mistral
 from dotenv import load_dotenv
 
@@ -13,6 +13,11 @@ DEFAULT_SYSTEM_PROMPT = (
     "Tu es un assistant médical francophone. "
     "Réponds de façon concise et précise."
 )
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 @app.route("/health", methods=["GET"])
